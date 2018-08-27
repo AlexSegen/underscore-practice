@@ -3,10 +3,10 @@ import _ from 'underscore';
 
 $(document).ready(function(){
 
-    let user = [];
     let json = [];
     var userList = $('.--row-users');
     var modalContent = $('.--modalContent');
+    var modalFooter = $('.--modalFooter');
     const apiURL = 'https://jsonplaceholder.typicode.com/users';
 
 
@@ -20,16 +20,12 @@ $(document).ready(function(){
 
             $.fn.printList(json);
 
-            //console.log(json)
+            let msg = 'Datos cargados con éxito';
+            let type = 'alert-success';
+            $.fn.printMsg(type,msg);
 
             $(item).removeClass('fa-spinner fa-spin').addClass('fa-envelope');
 
-        }).then( res => {
-            //const data = JSON.stringify(res);
-            json = res;
-
-            return json;
-            //return console.log(json);
         }).catch(err => {
             userList.empty();
             userList.append(`
@@ -51,6 +47,7 @@ $(document).ready(function(){
             json = res;
             
             modalContent.empty();
+            modalFooter.empty();
             modalContent.append(`
             <div class="panel panel-default">
             <div class="panel-heading">
@@ -98,7 +95,11 @@ $(document).ready(function(){
                 </tbody>
               </table>
             </div>
-          </div>`)          
+          </div>`);
+          modalFooter.append(`
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger --btn-delete" data-id="${json.id}">Delete</button>
+          `)  
         }).catch(err => {
             modalContent.empty();
             modalContent.append(`
@@ -109,56 +110,6 @@ $(document).ready(function(){
 
     };
 
-  
-    /*$.fn.fetchData = function(item){
-        $(item).removeClass('fa-envelope').addClass('fa-spinner fa-spin');
-        fetch(apiURL)
-        .then(response => response.json())
-        .then(json => {
-            
-            users = json
-
-            $(item).removeClass('fa-spinner fa-spin').addClass('fa-envelope');
-           
-            $.fn.printList(users);
-
-            return users;
-        })
-        .catch(err => err.json()).catch(err=>{
-            userList.empty();
-            userList.append(`
-            <li class='media'>
-            <div class='alert alert-danger'>Error while fetching data. 
-            <button type='button' class='btn btn-danger btn-sm btnfetchData'>Retry</button>
-            </div>
-            </li>`)
-            $(item).removeClass('fa-spinner fa-spin').addClass('fa-times');
-        });
-    }
-     */
-
-  /*   $.fn.printList = function(data){
-
-       userList.empty();
-        
-        $.each(data, function (index, value) {
-            userList.append(`
-            <li class="media">
-                <div class="media-left">
-                <a href="#">
-                    <img class="media-object" src="${value.picture.medium}" width='65' height='65'>
-                </a>
-                </div>
-                <div class="media-body">
-                <h4 class="media-heading">${value.name.first} ${value.name.last}</h4>
-                <span>${value.email}</span>
-                </div>
-            </li>`);
-        });
-    } */
-
-
-
     $.fn.printList = function(data){
 
         userList.empty();
@@ -166,20 +117,7 @@ $(document).ready(function(){
          $.each(data, function (index, value) {
              userList.append(`
              <div class="col-md-6 col-lg-4">
-             <div class="card hover-shadow">
-               <div class="flexbox align-items-center px-20 pt-20">
-                 <div class="dropdown">
-                   <a data-toggle="dropdown" href="#" aria-expanded="false"><i class="ti-more-alt rotate-90 text-muted"></i></a>
-                   <div class="dropdown-menu dropdown-menu-right">
-                     <a class="dropdown-item" href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                     <a class="dropdown-item" href="#"><i class="fa fa-fw fa-comments"></i> Messages</a>
-                     <a class="dropdown-item" href="#"><i class="fa fa-fw fa-phone"></i> Call</a>
-                     <div class="dropdown-divider"></div>
-                     <a class="dropdown-item" href="#"><i class="fa fa-fw fa-download"></i> Download Resume</a>
-                   </div>
-                 </div>
-               </div>
-         
+             <div class="card hover-shadow">        
                <div class="card-body text-center pt-1 pb-20">
                  <a href="#" data-id="${value.id}" class="--see-details" data-toggle="modal" data-target="#myModal">
                    <img class="avatar avatar-xxl" src="https://api.adorable.io/avatars/285/${value.email}.png">
@@ -205,6 +143,23 @@ $(document).ready(function(){
      }
 
 
+     $.fn.Delete = function(id){
+        var type = 'alert-danger';
+        var msg = 'Elemento con ID: ' + id  + ' ha sido eliminado.';
+        $.fn.printMsg(type, msg)
+     }
+
+     $.fn.printMsg = function(type, msg){
+
+        $('.--alert-response').removeAttr('class').addClass('--alert-response alert ' + type).text(msg).fadeIn('fast');
+
+        setTimeout(() => {
+            $('.--alert-response').fadeOut('fast');
+        }, 3000);
+        
+     }
+
+
     $(document).on('click','.btnfetchData',function(){
 
         let $this = $(this)[0].children[0];
@@ -219,6 +174,17 @@ $(document).ready(function(){
         let id = $(this)[0].dataset.id;
 
         $.fn.Details(id);
+
+    });
+
+
+    $(document).on('click','.--btn-delete',function(){
+
+        let id = $(this)[0].dataset.id;
+        
+        if(confirm('Are you sure?')){
+            $.fn.Delete(id);
+        }
 
     });
 
