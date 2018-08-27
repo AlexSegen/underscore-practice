@@ -103,9 +103,7 @@ $(document).ready(function(){
             modalContent.empty();
             modalContent.append(`
             <li class='media'>
-            <div class='alert alert-danger'>Error while fetching data. 
-            <button type='button' class='btn btn-danger btn-sm btnfetchData'>Retry</button>
-            </div>
+            <div class='alert alert-danger'>Error while fetching data.</div>
             </li>`)
         });
 
@@ -219,7 +217,7 @@ $(document).ready(function(){
     $(document).on('click','.--see-details',function(){
 
         let id = $(this)[0].dataset.id;
-               
+
         $.fn.Details(id);
 
     });
