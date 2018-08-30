@@ -41,15 +41,17 @@ $.fn.Init = function(item) {
   });
 };
 
-$.fn.loadData = () => {
+$.fn.loadData = function() {
   return json;
 };
 
-$.fn.sortBy = function(arg, active) {
+$.fn.sortBy = function(sorting, active) {
   if (active == "ASC") {
-    var x = _.sortBy($.fn.loadData(), arg);
+    var x = _.sortBy($.fn.loadData(), sorting);
   } else if (active == "DESC") {
-    var x = _.sortBy($.fn.loadData(), arg).reverse();
+    var x = _.sortBy($.fn.loadData(), sorting).reverse();
+  } else {
+    console.log("Invalid sorting.");
   }
 
   $.fn.printList(x);
@@ -220,22 +222,32 @@ $(document).on("click", ".--btn-delete", function() {
   }
 });
 
-$(document).ready(() => {
+$(document).ready(function() {
   $(document).on("click", ".--sortBy", function() {
     var sorting = $(this).data("sort");
-    var $this = $(this).data("active");
+    var active = $(this)[0].dataset.active;
+
+    console.log(active);
 
     var asc = "ASC";
     var desc = "DESC";
 
-    if ($this == "false") {
-      $(".--sortBy").attr("data-active", "false");
-      $(this).attr("data-active", "true");
+    if (active == "false") {
+      $(".--sortBy")
+        .removeAttr("data-active")
+        .attr("data-active", "false");
+      $(this)
+        .removeAttr("data-active")
+        .attr("data-active", "true");
       $.fn.sortBy(sorting, asc);
     } else {
-      $(this).attr("data-active", "false");
+      $(this)
+        .removeAttr("data-active")
+        .attr("data-active", "false");
       $.fn.sortBy(sorting, desc);
     }
+
+    console.log(active);
   });
 
   $.fn.Init();
