@@ -139,7 +139,7 @@ $.fn.printList = function(data) {
 
   $.each(data, function(index, value) {
     userList.append(`
-             <div class="col-md-6 col-lg-4">
+             <div class="col-md-6 col-lg-4" data-user="${value.id}">
              <div class="card hover-shadow">        
                <div class="card-body text-center pt-1 pb-20">
                  <a href="#" data-id="${
@@ -176,9 +176,15 @@ $.fn.printList = function(data) {
 };
 
 $.fn.Delete = function(id) {
-  var type = "alert-danger";
-  var msg = "Elemento con ID: " + id + " ha sido eliminado.";
-  $.fn.printMsg(type, msg);
+
+  var data = $.fn.loadData();
+ 
+  //data.splice(_.findIndex(data, _.find(data, function (filter, index) { return filter.id == id; })), 1);
+  
+  $("[data-user='" + id + "']").remove();
+
+  $("#myModal").modal("hide");
+
 };
 
 $.fn.printMsg = function(type, msg) {
