@@ -29,7 +29,7 @@ $.fn.Init = item => {
     userList.empty();
     userList.append(`
             <li class='media'>
-            <div class='alert alert-danger'>Error while fetching data. 
+            <div class='alert alert-danger'>Error while fetching data: ${err.message} 
             <button type='button' class='btn btn-danger btn-sm btnfetchData'>Retry</button>
             </div>
             </li>`);
@@ -203,7 +203,7 @@ $(document).on("click", ".btnfetchData", function() {
 });
 
 $(document).on("click", ".--see-details", function() {
-  let id = $(this)[0].dataset.id;
+  let id = $(this).data("id");
   $.fn.findFirst(id);
 });
 
