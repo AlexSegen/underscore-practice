@@ -180,16 +180,26 @@ $.fn.printList = function(data) {
 };
 
 $.fn.Delete = function(id) {
-  //var data = $.fn.loadData();
-  //data.splice(_.findIndex(data, _.find(data, function (filter, index) { return filter.id == id; })), 1);
+  var data = $.fn.loadData();
+  data.splice(
+    _.findIndex(
+      data,
+      _.find(data, function(filter, index) {
+        return filter.id == id;
+      })
+    ),
+    1
+  );
+
+  json = data;
 
   $("[data-user='" + id + "']").remove();
 
   $("#myModal").modal("hide");
 
-  /*   let msg = "Eliminado con éxito";
+  let msg = "Eliminado con éxito";
   let type = "alert-danger";
-  $.fn.printMsg(type, msg); */
+  $.fn.printMsg(type, msg);
 };
 
 $.fn.printMsg = function(type, msg) {
