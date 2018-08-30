@@ -256,5 +256,16 @@ $(document).ready(function() {
     }
   });
 
+  $(document).on("keyup", ".txt", function () {
+    var $this = $(this);
+
+    var data = $.fn.loadData();
+
+    $.fn.printList(_.filter(data, function (filter, index) { 
+      return filter.name.toString().toLowerCase().indexOf($this.val().toString().toLowerCase()) > -1; 
+    }));
+  
+  });
+
   $.fn.Init();
 });
