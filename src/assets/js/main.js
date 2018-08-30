@@ -1,7 +1,7 @@
 
 import _ from 'underscore';
 
-$(document).ready(function(){
+
 
     let json = [];
     var userList = $('.--row-users');
@@ -17,6 +17,8 @@ $(document).ready(function(){
         $.getJSON(apiURL, (data) => {
             
             json = data;
+
+            $.fn.loadData();
 
             $.fn.printList(json);
 
@@ -38,9 +40,32 @@ $(document).ready(function(){
         });
     };
 
+    $.fn.loadData = function(){
+      return json;
+    }
+
+
+
+    $.fn.sortBy = function (arg, active) {
+      
+      if (active == "ASC") {
+        var x = _.sortBy($.fn.loadData(), arg);
+      } else if (active == "DESC") {
+        var x = _.sortBy($.fn.loadData(), arg).reverse();
+      }
+    
+      $.fn.printList(x);
+    }
+
+
+
+
+
 
     $.fn.Details = (id) => {
         
+        //$.getJSON(apiURL + '/' + id, (data) => {
+
         $.getJSON(apiURL + '/' + id, (data) => {
 
         }).then( res => {
@@ -110,6 +135,76 @@ $(document).ready(function(){
 
     };
 
+
+
+    $.fn.printDetails = function(){
+
+      var data = $.fn.loadData();
+
+      modalContent.empty();
+      modalFooter.empty();
+       
+       $.each(data, function (index, value) {
+
+        modalContent.append(`
+        <div class="panel panel-default">
+        <div class="panel-heading">
+        <h4 class="panel-title">User profile</h4>
+        </div>
+        <div class="panel-body">
+          <div class="profile__avatar">
+            <img src="https://api.adorable.io/avatars/285/${value.email}.png" alt="...">
+          </div>
+          <div class="profile__header">
+            <h4>${value.name} <small>${value.username}</small></h4>
+            <p class="text-muted">
+            ${value.email}
+            </p>
+            <p>
+              <a href="http://${value.website}/" target="_blank">${value.website}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+        <h4 class="panel-title">User info</h4>
+        </div>
+        <div class="panel-body">
+          <table class="table profile__table">
+            <tbody>
+              <tr>
+                <th><strong>Location</strong></th>
+                <td>${value.address.city}, ${value.address.street} ${value.address.suite}</td>
+              </tr>
+              <tr>
+                <th><strong>Phone</strong></th>
+                <td>${value.phone}</td>
+              </tr>
+              <tr>
+                <th><strong>Company name</strong></th>
+                <td>${value.company.name}</td>
+              </tr>
+              <tr>
+                <th><strong>Description</strong></th>
+                <td>${value.company.catchPhrase}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>`);
+      modalFooter.append(`
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger --btn-delete" data-id="${value.id}">Delete</button>
+      `)  
+
+       });
+      
+    }
+
+
+
     $.fn.printList = function(data){
 
         userList.empty();
@@ -173,7 +268,9 @@ $(document).ready(function(){
 
         let id = $(this)[0].dataset.id;
 
-        $.fn.Details(id);
+        //$.fn.Details(id);
+
+        $.fn.printDetails(id);
 
     });
 
@@ -188,6 +285,9 @@ $(document).ready(function(){
 
     });
 
+
+    
+
  /*    $(document).on('click','.btnsortEmail',function(){
 
         let $this = $(this)[0].children[0];
@@ -199,6 +299,31 @@ $(document).ready(function(){
         $.fn.printList(data);
 
     }); */
+
+$(document).ready(function(){
+
+  $(document).on("click", ".--sortBy", function() {
+    var sorting = $(this)[0].dataset.sort;
+    var $this = $(this)[0].dataset.active;
+
+    var asc = "ASC";
+    var desc = "DESC";
+
+    if ($this == "false") {
+      $(".--sortBy").attr("data-active", "false");
+      $(this).attr("data-active", "true");
+      $.fn.sortBy(sorting, asc);
+    } else {
+      $(this).attr("data-active", "false");
+      $.fn.sortBy(sorting, desc);
+    }
+  });
+
+
+
+
+  $.fn.Init();
+
 
 });
 
