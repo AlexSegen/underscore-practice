@@ -14,8 +14,6 @@ $.fn.Init = function(item) {
   $.getJSON(apiURL, data => {
     json = data;
 
-    $.fn.loadData();
-
     $.fn.printList(json);
 
     let msg = "Datos cargados con éxito";
@@ -41,15 +39,11 @@ $.fn.Init = function(item) {
   });
 };
 
-$.fn.loadData = function() {
-  return json;
-};
-
 $.fn.sortBy = function(sorting, active) {
   if (active == "ASC") {
-    var x = _.sortBy($.fn.loadData(), sorting);
+    var x = _.sortBy(json, sorting);
   } else if (active == "DESC") {
-    var x = _.sortBy($.fn.loadData(), sorting).reverse();
+    var x = _.sortBy(json, sorting).reverse();
   } else {
     console.log("Invalid sorting.");
   }
@@ -58,9 +52,8 @@ $.fn.sortBy = function(sorting, active) {
 };
 
 $.fn.findFirst = function(id) {
-  var data = $.fn.loadData();
 
-  var x = _.find(data, function(find) {
+  var x = _.find(json, function(find) {
     return find.id == id;
   });
 
@@ -68,7 +61,6 @@ $.fn.findFirst = function(id) {
 };
 
 $.fn.printDetails = function(value) {
-  //var data = $.fn.loadData();
 
   modalContent.empty();
   modalFooter.empty();
@@ -180,18 +172,15 @@ $.fn.printList = function(data) {
 };
 
 $.fn.Delete = function(id) {
-  var data = $.fn.loadData();
-  data.splice(
+  json.splice(
     _.findIndex(
-      data,
-      _.find(data, function(filter, index) {
+      json,
+      _.find(json, function(filter, index) {
         return filter.id == id;
       })
     ),
     1
   );
-
-  json = data;
 
   $("[data-user='" + id + "']").remove();
 
@@ -259,9 +248,7 @@ $(document).ready(function() {
   $(document).on("keyup", ".txt", function () {
     var $this = $(this);
 
-    var data = $.fn.loadData();
-
-    $.fn.printList(_.filter(data, function (filter, index) { 
+    $.fn.printList(_.filter(json, function (filter, index) { 
       return filter.name.toString().toLowerCase().indexOf($this.val().toString().toLowerCase()) > -1; 
     }));
   
