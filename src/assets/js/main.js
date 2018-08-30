@@ -237,8 +237,6 @@ $(document).ready(function() {
     var sorting = $(this).data("sort");
     var active = $(this)[0].dataset.active;
 
-    console.log(active);
-
     var asc = "ASC";
     var desc = "DESC";
 
