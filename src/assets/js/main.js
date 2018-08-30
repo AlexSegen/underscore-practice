@@ -254,8 +254,6 @@ $(document).ready(function() {
         .attr("data-active", "false");
       $.fn.sortBy(sorting, desc);
     }
-
-    console.log(active);
   });
 
   $.fn.Init();
