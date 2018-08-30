@@ -6,7 +6,7 @@ var modalContent = $(".--modalContent");
 var modalFooter = $(".--modalFooter");
 const apiURL = "https://jsonplaceholder.typicode.com/users";
 
-$.fn.Init = item => {
+$.fn.Init = function(item) {
   $(item)
     .removeClass("fa-envelope")
     .addClass("fa-spinner fa-spin");
@@ -29,7 +29,9 @@ $.fn.Init = item => {
     userList.empty();
     userList.append(`
             <li class='media'>
-            <div class='alert alert-danger'>Error while fetching data: ${err.message} 
+            <div class='alert alert-danger'>Error while fetching data: ${
+              err.message
+            } 
             <button type='button' class='btn btn-danger btn-sm btnfetchData'>Retry</button>
             </div>
             </li>`);
@@ -39,7 +41,7 @@ $.fn.Init = item => {
   });
 };
 
-$.fn.loadData = function() {
+$.fn.loadData = () => {
   return json;
 };
 
@@ -182,6 +184,10 @@ $.fn.Delete = function(id) {
   $("[data-user='" + id + "']").remove();
 
   $("#myModal").modal("hide");
+
+  /*   let msg = "Eliminado con éxito";
+  let type = "alert-danger";
+  $.fn.printMsg(type, msg); */
 };
 
 $.fn.printMsg = function(type, msg) {
@@ -197,8 +203,7 @@ $.fn.printMsg = function(type, msg) {
 };
 
 $(document).on("click", ".btnfetchData", function() {
-  let $this = $(this)[0].children[0];
-
+  let $this = $(this).children("i");
   $.fn.Init($this);
 });
 
@@ -215,8 +220,8 @@ $(document).on("click", ".--btn-delete", function() {
   }
 });
 
-$(document).ready(function() {
-  $(document).on("click", ".--sortBy", function() {
+$(document).ready(() => {
+  $(document).on("click", ".--sortBy", () => {
     var sorting = $(this).data("sort");
     var $this = $(this).data("active");
 
