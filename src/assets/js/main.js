@@ -176,15 +176,12 @@ $.fn.printList = function(data) {
 };
 
 $.fn.Delete = function(id) {
-
-  var data = $.fn.loadData();
- 
+  //var data = $.fn.loadData();
   //data.splice(_.findIndex(data, _.find(data, function (filter, index) { return filter.id == id; })), 1);
-  
+
   $("[data-user='" + id + "']").remove();
 
   $("#myModal").modal("hide");
-
 };
 
 $.fn.printMsg = function(type, msg) {
