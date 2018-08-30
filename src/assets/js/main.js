@@ -221,7 +221,7 @@ $(document).on("click", ".--btn-delete", function() {
 });
 
 $(document).ready(() => {
-  $(document).on("click", ".--sortBy", () => {
+  $(document).on("click", ".--sortBy", function() {
     var sorting = $(this).data("sort");
     var $this = $(this).data("active");
 
